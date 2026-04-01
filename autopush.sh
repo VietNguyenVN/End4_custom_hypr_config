@@ -1,23 +1,27 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Repository to update
-REPO_DIR="$HOME/Github/End4_custom_hypr_config"
+# Automatically detect repository root (based on script location)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="$(cd "$SCRIPT_DIR" && git rev-parse --show-toplevel 2>/dev/null || true)"
 
+if [[ -z "$REPO_DIR" ]]; then
+  echo "Error: Could not determine git repository root. Make sure this script is inside your repo."
+  exit 1
+fi
 # Edit this list to add/remove folders you want copied from $HOME into the repo.
-# Paths are relative to $HOME.
 SYNC_PATHS=(
   ".config/hypr/custom"
 )
 
 # Edit this list to add/remove files or folders you want excluded.
-# Paths are relative to $HOME.
 EXCLUDE_PATHS=(
   ".config/hypr/custom/scripts/printdotscommits.sh"
 )
 
 log() {
-  printf '[%s] %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$*"
+  printf '[%s] %s
+' "$(date '+%Y-%m-%d %H:%M:%S')" "$*"
 }
 
 relpath_to_source() {
@@ -25,15 +29,11 @@ relpath_to_source() {
   local target_rel="$2"
 
   case "$target_rel" in
-  "$source_rel")
-    printf '.\n'
-    ;;
-  "$source_rel"/*)
-    printf '%s\n' "${target_rel#"$source_rel"/}"
-    ;;
-  *)
-    return 1
-    ;;
+  "$source_rel") printf '.
+' ;;
+  "$source_rel"/*) printf '%s
+' "${target_rel#"$source_rel"/}" ;;
+  *) return 1 ;;
   esac
 }
 
@@ -42,10 +42,10 @@ sync_one_path() {
   local src="$HOME/$rel_path"
   local dst="$REPO_DIR/$rel_path"
 
-  if [[ ! -e "$src" ]]; then
+  [[ ! -e "$src" ]] && {
     log "Skipping missing path: $src"
-    return 0
-  fi
+    return
+  }
 
   mkdir -p "$(dirname "$dst")"
 
@@ -53,9 +53,7 @@ sync_one_path() {
   local ex rel_ex
   for ex in "${EXCLUDE_PATHS[@]}"; do
     if rel_ex="$(relpath_to_source "$rel_path" "$ex")"; then
-      if [[ "$rel_ex" != "." ]]; then
-        rsync_excludes+=("--exclude=$rel_ex")
-      fi
+      [[ "$rel_ex" != "." ]] && rsync_excludes+=("--exclude=$rel_ex")
     fi
   done
 
@@ -64,10 +62,10 @@ sync_one_path() {
     rsync -a --delete "${rsync_excludes[@]}" "$src/" "$dst/"
   else
     for ex in "${EXCLUDE_PATHS[@]}"; do
-      if [[ "$ex" == "$rel_path" ]]; then
+      [[ "$ex" == "$rel_path" ]] && {
         log "Skipping excluded file: $rel_path"
-        return 0
-      fi
+        return
+      }
     done
     log "Copying file: $rel_path"
     cp -a "$src" "$dst"
@@ -75,36 +73,26 @@ sync_one_path() {
 }
 
 choose_commit_message() {
-  echo "Choose commit message option:"
-  echo "1) Automatic (timestamp)"
-  echo "2) Custom message"
-  read -rp "Enter choice [1/2]: " choice
+  # Send prompts to stderr so they don't get captured
+  echo "Choose commit message option:" >&2
+  echo "1) Automatic (timestamp)" >&2
+  echo "2) Custom message" >&2
+  read -rp "Enter choice [1/2]: " choice >&2
 
   case "$choice" in
-  1 | "")
-    echo "Sync dotfiles $(date '+%Y-%m-%d %H:%M:%S')"
-    ;;
+  1 | "") echo "Sync dotfiles $(date '+%Y-%m-%d %H:%M:%S')" ;;
   2)
-    read -rp "Enter your commit message: " custom_msg
-    if [[ -z "$custom_msg" ]]; then
-      echo "Sync dotfiles $(date '+%Y-%m-%d %H:%M:%S')"
-    else
-      echo "$custom_msg"
-    fi
+    read -rp "Enter your commit message: " custom_msg >&2
+    [[ -z "$custom_msg" ]] && echo "Sync dotfiles $(date '+%Y-%m-%d %H:%M:%S')" || echo "$custom_msg"
     ;;
   *)
-    echo "Invalid choice, using automatic message."
+    echo "Invalid choice, using automatic message." >&2
     echo "Sync dotfiles $(date '+%Y-%m-%d %H:%M:%S')"
     ;;
   esac
 }
 
 main() {
-  if [[ ! -d "$REPO_DIR/.git" ]]; then
-    log "Error: not a git repository: $REPO_DIR"
-    exit 1
-  fi
-
   cd "$REPO_DIR"
 
   for path in "${SYNC_PATHS[@]}"; do
@@ -122,10 +110,10 @@ main() {
   fi
 
   current_branch="$(git branch --show-current)"
-  if [[ -z "$current_branch" ]]; then
-    log "Detached HEAD detected; skipping git push."
+  [[ -z "$current_branch" ]] && {
+    log "Detached HEAD, skipping push."
     exit 0
-  fi
+  }
 
   git push origin "$current_branch"
   log "Pushed to origin/$current_branch"
