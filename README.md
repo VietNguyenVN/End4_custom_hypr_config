@@ -11,6 +11,9 @@ These configurations extend the original setup with:
 - Extended .config directory (e.g. nvim)
 
 [NOTE]
+
 This is a personal configuration, so expect opinionated choices.
+
 Feel free to adapt anything to your own workflow.
+
 This setup is based on the End-4 Hyprland dotfiles: <https://github.com/end-4/dots-hyprland>
