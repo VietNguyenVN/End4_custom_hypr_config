@@ -1,69 +1,165 @@
--- hyprlang noerror false
--- See https://wiki.hyprland.org/Configuring/Binds/
---!
--- User
-hl.bind(
-	"CTRL + SUPER + SLASH",
-	hl.dsp.exec_cmd("xdg-open ~/.config/illogical-impulse/config.json"),
-	{ description = "Edit shell config" }
-) -- [hidden]
-hl.bind(
-	"CTRL + SUPER + ALT + SLASH",
-	hl.dsp.exec_cmd("xdg-open ~/.config/hypr/custom/keybinds.conf"),
-	{ description = "Edit extra keybinds" }
-) -- [hidden]
-
--- Add stuff here
--- Use #! to add an extra column on the cheatsheet
--- Use ##! to add a section in that column
--- Add a comment after a bind to add a description, like above
-
--- ##! Custom/Override
 -- Q key
-hl.bind("SUPER + SHIFT + Q", hl.dsp.exec_cmd("pkill -9 -f $(hyprctl activewindow -j | jq -r .class)")) -- [hidden]
+hl.bind("SUPER + SHIFT + Q", hl.dsp.exec_cmd("pkill -9 -f $(hyprctl activewindow -j | jq -r .class)"))
 
 -- E key
-hl.bind("SUPER + SHIFT + E", hl.dsp.exec_cmd("[float; size 960 600; center] dolphin")) -- [hidden]
+hl.bind("SUPER + SHIFT + E", hl.dsp.exec_cmd("[float; size 960 600; center] dolphin"))
 
 -- O Key
 hl.unbind("SUPER + O")
-hl.bind("SUPER + O", hl.dsp.exec_cmd("~/.config/hypr/custom/scripts/vesktop_special.sh")) -- [hidden]
-hl.bind("SUPER + SHIFT + O", hl.dsp.exec_cmd("obsidian")) -- [hidden]
---/# bind = Super+Ø/Shift, O,, # Vesktop/Obsidian
+hl.bind("SUPER + O", function()
+	local WS = "special:1"
+	local APP_CMD = "vesktop"
+	local CLASS_RE = "vesktop"
+
+	local active_ws = hl.get_active_workspace()
+	if active_ws and active_ws.name == WS then
+		return
+	end
+
+	local target = nil
+	for _, win in ipairs(hl.get_windows()) do
+		if win.class and win.class:lower():find(CLASS_RE, 1, true) then
+			target = win
+			break
+		end
+	end
+
+	if not target then
+		hl.exec_cmd(APP_CMD, { workspace = WS })
+	else
+		if not target.workspace or target.workspace.name ~= WS then
+			hl.dispatch(hl.dsp.focus({ window = target }))
+			hl.dispatch(hl.dsp.move({ workspace = WS }))
+		end
+	end
+
+	hl.dispatch(hl.dsp.workspace.toggle_special("1"))
+end, { description = "Vesktop" })
+hl.bind("SUPER + SHIFT + O", hl.dsp.exec_cmd("obsidian"), { description = "Obsidian" })
 
 -- W key
 hl.bind("SUPER + SHIFT + W", hl.dsp.exec_cmd("firefox --private-window")) -- [hidden]
 
 -- A key
 hl.unbind("SUPER + A")
-hl.bind("SUPER + A", hl.dsp.exec_cmd("~/.config/hypr/custom/scripts/spotify_special.sh")) -- Spotify
+hl.bind("SUPER + A", function()
+	local WS = "special:4"
+	local APP_CMD = "spotify-launcher"
+	local CLASS_RE = "spotify"
+
+	local active_ws = hl.get_active_workspace()
+	if active_ws and active_ws.name == WS then
+		return
+	end
+
+	local target = nil
+	for _, win in ipairs(hl.get_windows()) do
+		if win.class and win.class:lower():find(CLASS_RE, 1, true) then
+			target = win
+			break
+		end
+	end
+
+	if not target then
+		hl.exec_cmd(APP_CMD, { workspace = WS })
+	else
+		if not target.workspace or target.workspace.name ~= WS then
+			hl.dispatch(hl.dsp.focus({ window = target }))
+			hl.dispatch(hl.dsp.move({ workspace = WS }))
+		end
+	end
+
+	hl.dispatch(hl.dsp.workspace.toggle_special("4"))
+end, {
+	description = "Spotify",
+})
 
 -- X key
 hl.unbind("SUPER + X")
-hl.bind("SUPER + X", hl.dsp.exec_cmd("kitty nvim")) -- [hidden]
+hl.bind("SUPER + X", hl.dsp.exec_cmd("kitty nvim"))
 
 -- C key
 hl.unbind("SUPER + C")
-hl.bind("SUPER + C", hl.dsp.exec_cmd("papers")) -- Document viewer
+hl.bind("SUPER + C", hl.dsp.exec_cmd("papers"), { description = "Document Viewer" })
 
 -- U key
-hl.bind("SUPER + U", hl.dsp.exec_cmd("kitty ~/.config/hypr/custom/scripts/printdotscommits.sh")) -- [hidden]
-hl.bind("SUPER + SHIFT + U", hl.dsp.exec_cmd("kitty ~/.config/hypr/custom/scripts/updatedots.sh")) -- [hidden]
---/# bind = Super+Ø/Shift, U,, # dots-hyprland update
+hl.bind(
+	"SUPER + U",
+	hl.dsp.exec_cmd("kitty ~/.config/hypr/custom/scripts/printdotscommits.sh"),
+	{ description = "Check dots-hyprland commits" }
+)
+hl.bind(
+	"SUPER + SHIFT + U",
+	hl.dsp.exec_cmd("kitty ~/.config/hypr/custom/scripts/updatedots.sh"),
+	{ description = "Update dots-hyprland" }
+)
 
 -- Y key
-hl.bind("SUPER + Y", hl.dsp.exec_cmd("kitty ~/.config/hypr/custom/scripts/archstatusprint.sh")) -- [hidden]
-hl.bind("SUPER + SHIFT + Y", hl.dsp.exec_cmd("kitty ~/.config/hypr/custom/scripts/updatesystem.sh")) -- [hidden]
---/# bind = Super+Ø/Shift, Y,, # Full system update
+hl.bind(
+	"SUPER + Y",
+	hl.dsp.exec_cmd("kitty ~/.config/hypr/custom/scripts/archstatusprint.sh"),
+	{ description = "Check Archstatus" }
+)
+hl.bind(
+	"SUPER + SHIFT + Y",
+	hl.dsp.exec_cmd("kitty ~/.config/hypr/custom/scripts/updatesystem.sh"),
+	{ description = "Update system" }
+)
 
 -- D key
-hl.bind("SUPER + ALT + D", hl.dsp.exec_cmd("~/.config/hypr/custom/scripts/toggledock.sh")) -- Toggle dock
+hl.bind(
+	"SUPER + ALT + D",
+	hl.dsp.exec_cmd("~/.config/hypr/custom/scripts/toggledock.sh"),
+	{ description = "Toggle dock" }
+)
 
 -- P key
-hl.bind("SUPER + ALT + P", hl.dsp.exec_cmd("~/.config/hypr/custom/scripts/togglerefresh.sh")) -- Change refresh rate
+local GENERAL_LUA = os.getenv("HOME") .. "/.config/hypr/custom/general.lua"
+local function read_file(path)
+	local f, err = io.open(path, "r")
+	if not f then
+		error(err)
+	end
+	local data = f:read("*a")
+	f:close()
+	return data
+end
+
+local function write_file(path, data)
+	local f, err = io.open(path, "w")
+	if not f then
+		error(err)
+	end
+	f:write(data)
+	f:close()
+end
+local function notify(msg)
+	hl.exec_cmd(string.format('notify-send "Hyprland Refresh Rate" "%s"', msg))
+end
+local function toggle_refresh()
+	local src = read_file(GENERAL_LUA)
+	-- Match any: refresh = 120
+	local current = tonumber(src:match("refresh%s*=%s*(%d+)"))
+	if not current then
+		notify("Could not find refresh value")
+		return
+	end
+	local next_rate = (current == 120) and 60 or 120
+	-- Replace first refresh assignment only
+	local updated, n = src:gsub("refresh%s*=%s*%d+", "refresh = " .. next_rate, 1)
+	if n == 0 then
+		notify("Failed to update refresh value")
+		return
+	end
+	write_file(GENERAL_LUA, updated)
+	-- Reload Hyprland config
+	hl.exec_cmd("hyprctl reload")
+	notify(string.format("eDP-1 switched to %dHz", next_rate))
+end
+hl.bind("SUPER + ALT + P", toggle_refresh, { description = "Change refresh rate" })
 
 -- H key
-hl.bind("SUPER + ALT + H", hl.dsp.exec_cmd("~/.config/hypr/custom/scripts/showdesktop.sh")) -- Show desktop
+-- hl.bind("SUPER + ALT + H", hl.dsp.exec_cmd("~/.config/hypr/custom/scripts/showdesktop.sh")) -- Show desktop
 
 -- J key
 hl.unbind("SUPER + J")

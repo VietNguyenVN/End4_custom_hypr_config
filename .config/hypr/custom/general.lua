@@ -1,11 +1,10 @@
--- hyprlang noerror false
 -- Put general config stuff here
--- Here's a list of every variable: https://wiki.hyprland.org/Configuring/Variables/
 
--- monitor=,addreserved, 0, 0, 0, 0 # Custom reserved area
+local refresh = 60
+
 hl.monitor({
 	output = "eDP-1",
-	mode = "1920x1200@60",
+	mode = "1920x1200@" .. refresh,
 	position = "auto",
 	scale = 1,
 	transform = 0,
@@ -18,8 +17,6 @@ hl.monitor({
 	scale = 1,
 	mirror = "eDP-1",
 })
-
--- HDMI port: mirror display. To see device name, use `hyprctl monitors`
 
 hl.config({
 	general = {
@@ -38,7 +35,7 @@ hl.config({
 
 	scrolling = {
 		column_width = 1,
-		--explicit_column_widths = 0.5, 1.0,
+		-- explicit_column_widths = 0.5, 1.0,
 		direction = "up",
 	},
 
