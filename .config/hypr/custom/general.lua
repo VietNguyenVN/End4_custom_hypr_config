@@ -19,9 +19,7 @@ hl.monitor({
 })
 
 hl.config({
-	general = {
-		layout = "scrolling",
-	},
+	general = { layout = "scrolling" },
 
 	decoration = {
 		blur = {

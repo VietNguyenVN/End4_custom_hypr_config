@@ -38,17 +38,3 @@ hl.workspace_rule({
 	workspace = "s[true]",
 	gaps_out = 50,
 })
-
-hl.window_rule({
-	match = {
-		class = "vesktop",
-	},
-	workspace = "special:1",
-})
-
-hl.window_rule({
-	match = {
-		class = "spotify",
-	},
-	workspace = "special:4",
-})
