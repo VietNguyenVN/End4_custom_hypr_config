@@ -409,49 +409,61 @@ end
 
 -- DWINDLE LAYOUT
 hl.unbind("SUPER + J")
-hl.bind("SUPER + J", layout_bind("dwindle", "togglesplit"))
+hl.bind("SUPER + J", layout_bind("dwindle", "togglesplit"), { description = "[d] Togglesplit" })
 
 -- SCROLLING LAYOUT
 -- Keyboard
 hl.unbind("SUPER + Period")
 hl.unbind("SUPER + Comma")
-hl.bind("SUPER + Period", layout_bind("scrolling", "focus u"))
-hl.bind("SUPER + Comma", layout_bind("scrolling", "focus d"))
-hl.bind("SUPER + SHIFT + Period", layout_bind("scrolling", "colresize +0.1"))
-hl.bind("SUPER + SHIFT + Comma", layout_bind("scrolling", "colresize -0.1"))
-hl.bind("SUPER + ALT + Period", layout_bind("scrolling", "swapcol r"))
-hl.bind("SUPER + ALT + Comma", layout_bind("scrolling", "swapcol l"))
+hl.bind("SUPER + Period", layout_bind("scrolling", "focus u"), { description = "[s] Move view (u)" })
+hl.bind("SUPER + Comma", layout_bind("scrolling", "focus d"), { description = "[s] Move view (d)" })
+hl.bind(
+	"SUPER + SHIFT + Period",
+	layout_bind("scrolling", "colresize +0.1"),
+	{ description = "[s] Change size (+0.1)" }
+)
+hl.bind("SUPER + SHIFT + Comma", layout_bind("scrolling", "colresize -0.1"), { description = "[s] Change size (-0.1)" })
+hl.bind("SUPER + ALT + Comma", layout_bind("scrolling", "swapcol l"), { description = "[s] Swap row [u]" })
+hl.bind("SUPER + ALT + Period", layout_bind("scrolling", "swapcol r"), { description = "[s] Swap row [d]" })
 -- Mouse
 hl.unbind("SUPER + mouse_up")
 hl.unbind("SUPER + mouse_down")
-hl.bind("SUPER + mouse_up", layout_bind("scrolling", "focus u"))
-hl.bind("SUPER + mouse_down", layout_bind("scrolling", "focus d"))
+hl.bind("SUPER + mouse_up", layout_bind("scrolling", "focus u"), { description = "[s] Move view (u)" })
+hl.bind("SUPER + mouse_down", layout_bind("scrolling", "focus d"), { description = "[s] Move view (d)" })
 hl.unbind("SUPER + SHIFT + mouse_up")
 hl.unbind("SUPER + SHIFT + mouse_down")
 hl.bind("SUPER + SHIFT + mouse_up", hl.dsp.focus({ workspace = "r+1" }))
 hl.bind("SUPER + SHIFT + mouse_down", hl.dsp.focus({ workspace = "r-1" }))
 hl.unbind("SUPER + ALT + mouse_up")
 hl.unbind("SUPER + ALT + mouse_down")
-hl.bind("SUPER + ALT + mouse_up", layout_bind("scrolling", "swapcol l"))
-hl.bind("SUPER + ALT + mouse_down", layout_bind("scrolling", "swapcol r"))
+hl.bind("SUPER + ALT + mouse_up", layout_bind("scrolling", "swapcol l"), { description = "[s] Swap row [u]" })
+hl.bind("SUPER + ALT + mouse_down", layout_bind("scrolling", "swapcol r"), { description = "[s] Swap row [d]" })
 hl.unbind("CTRL + SUPER + mouse_up")
 hl.unbind("CTRL + SUPER + mouse_down")
-hl.bind("CTRL + SUPER + mouse_up", layout_bind("scrolling", "colresize -0.1"))
-hl.bind("CTRL + SUPER + mouse_down", layout_bind("scrolling", "colresize +0.1"))
+hl.bind(
+	"CTRL + SUPER + mouse_up",
+	layout_bind("scrolling", "colresize -0.1"),
+	{ description = "[s] Change size (-0.1)" }
+)
+hl.bind(
+	"CTRL + SUPER + mouse_down",
+	layout_bind("scrolling", "colresize +0.1"),
+	{ description = "[s] Change size (+0.1)" }
+)
 
 -- MASTER LAYOUT
-hl.bind("SUPER + J", layout_bind("master", "swapwithmaster"))
-hl.bind("SUPER + SHIFT + J", layout_bind("master", "addmaster"))
-hl.bind("SUPER + SHIFT + K", layout_bind("master", "removemaster"))
-hl.bind("SUPER + COMMA", layout_bind("master", "cycleprev noloop"))
-hl.bind("SUPER + PERIOD", layout_bind("master", "cyclenext noloop"))
-hl.bind("SUPER + SHIFT + COMMA", layout_bind("master", "swapprev noloop"))
-hl.bind("SUPER + SHIFT + PERIOD", layout_bind("master", "swapnext noloop"))
-hl.bind("SUPER + ALT + COMMA", layout_bind("master", "rollnext"))
-hl.bind("SUPER + ALT + PERIOD", layout_bind("master", "rollprev"))
+hl.bind("SUPER + J", layout_bind("master", "swapwithmaster"), { description = "[m] Swap master" })
+hl.bind("SUPER + SHIFT + J", layout_bind("master", "addmaster"), { description = "[m] Add master" })
+hl.bind("SUPER + SHIFT + K", layout_bind("master", "removemaster"), { description = "[m] Remove master" })
+hl.bind("SUPER + COMMA", layout_bind("master", "cycleprev noloop"), { description = "[m] Cycle prev" })
+hl.bind("SUPER + PERIOD", layout_bind("master", "cyclenext noloop"), { description = "[m] Cycle next" })
+hl.bind("SUPER + SHIFT + COMMA", layout_bind("master", "swapprev noloop"), { description = "[m] Swap prev" })
+hl.bind("SUPER + SHIFT + PERIOD", layout_bind("master", "swapnext noloop"), { description = "[m] Swap next" })
+hl.bind("SUPER + ALT + COMMA", layout_bind("master", "rollnext"), { description = "[m] Roll next" })
+hl.bind("SUPER + ALT + PERIOD", layout_bind("master", "rollprev"), { description = "[m] Roll prev" })
 hl.bind("SUPER + SEMICOLON", layout_bind("master", "mfact -0.05"))
 hl.bind("SUPER + APOSTROPHE", layout_bind("master", "mfact +0.05"))
-hl.bind("SUPER + SPACE", layout_bind("master", "orientationcycle"))
+hl.bind("SUPER + SPACE", layout_bind("master", "orientationcycle"), { description = "[m] Cycle orientation" })
 
 -- MONOCLE LAYOUT
 hl.bind("ALT + TAB", layout_bind("monocle", "cyclenext"))

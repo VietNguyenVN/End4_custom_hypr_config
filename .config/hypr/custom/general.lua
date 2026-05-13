@@ -34,7 +34,7 @@ hl.config({
 	scrolling = {
 		column_width = 1,
 		-- explicit_column_widths = 0.5, 1.0,
-		direction = "up",
+		direction = "down",
 	},
 
 	master = {
