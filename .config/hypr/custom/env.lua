@@ -1,22 +1,18 @@
--- hyprlang noerror false
--- You can put extra environment variables here
--- https://wiki.hyprland.org/Configuring/Environment-variables/
+local function set_env(name, value)
+	hl.env(name, value)
+end
 
--- ######### Input method ##########
--- See https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland
+for _, item in ipairs({
+	{ "QT_IM_MODULE", "fcitx" },
+	{ "XMODIFIERS", "@im=fcitx" },
+	{ "SDL_IM_MODULE", "fcitx" },
+	{ "GLFW_IM_MODULE", "ibus" },
+	{ "INPUT_METHOD", "fcitx" },
+}) do
+	set_env(item[1], item[2])
+end
 
--- hl.env("GTK_IM_MODULE", "fcitx")
-hl.env("QT_IM_MODULE", "fcitx")
-hl.env("XMODIFIERS", "@im=fcitx")
-hl.env("SDL_IM_MODULE", "fcitx")
-hl.env("GLFW_IM_MODULE", "ibus")
-hl.env("INPUT_METHOD", "fcitx")
-
-hl.config({
-	ecosystem = {
-		enforce_permissions = true,
-	},
-})
+-- hl.config({ ecosystem = { enforce_permissions = true }})
 
 hl.permission({ binary = "fcitx5-lotus-server", type = "keyboard", mode = "allow" })
 
@@ -30,7 +26,6 @@ hl.permission({ binary = "fcitx5-lotus-server", type = "keyboard", mode = "allow
 -- https://wiki.archlinux.org/title/Category:Text_editors
 -- for example: vi nano nvim ...
 
-hl.env("EDITOR", "nvim")
-
-hl.env("XCURSOR_THEME", "Bibata-Modern-Classic")
-hl.env("XCURSOR_SIZE", "24")
+set_env("EDITOR", "nvim")
+-- set_env("XCURSOR_THEME", "Bibata-Modern-Classic")
+-- set_env("XCURSOR_SIZE", "24")

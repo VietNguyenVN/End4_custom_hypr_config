@@ -2,41 +2,44 @@
 
 local refresh = 60
 
-hl.monitor({
-	output = "eDP-1",
-	mode = "1920x1200@" .. refresh,
-	position = "auto",
-	scale = 1,
-	transform = 0,
-})
+local monitors = {
+	{
+		output = "eDP-1",
+		mode = string.format("1920x1200@%d", refresh),
+		position = "auto",
+		scale = 1,
+		transform = 0,
+	},
+	{
+		output = "DP-1",
+		mode = "1920x1200@60",
+		position = "1920x0",
+		scale = 1,
+		mirror = "eDP-1",
+	},
+}
 
-hl.monitor({
-	output = "DP-1",
-	mode = "1920x1200@60",
-	position = "1920x0",
-	scale = 1,
-	mirror = "eDP-1",
-})
+for _, monitor in ipairs(monitors) do
+	hl.monitor(monitor)
+end
 
 hl.config({
-	general = { layout = "scrolling" },
-
+	general = {
+		layout = "scrolling",
+	},
 	decoration = {
 		blur = {
 			xray = false,
 		},
 	},
-
 	input = {
 		follow_mouse = 0,
 	},
-
 	scrolling = {
 		column_width = 1,
 		-- explicit_column_widths = 0.5, 1.0,
 		direction = "down",
 	},
-
 	master = {
 		new_status = "inherit",
 	},
