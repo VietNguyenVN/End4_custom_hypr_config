@@ -14,12 +14,7 @@ hl.window_rule({
 })
 
 -- Enable blur for xwayland context menus
-hl.window_rule({
-	match = {
-		xwayland = true,
-	},
-	no_blur = true,
-})
+-- hl.window_rule( { match = { xwayland = true }, no_blur = true } )
 
 -- Enable blur for every window
 hl.window_rule({
