@@ -216,9 +216,9 @@ local function toggle_refresh()
 end
 
 -- Basic binds
-rebind("SUPER + SHIFT + Q", hl.dsp.exec_cmd("pkill -9 -f $(hyprctl activewindow -j | jq -r .class)"))
-rebind("SUPER + SHIFT + E", hl.dsp.exec_cmd("[float; size 960 600; center] dolphin"))
-rebind("SUPER + SHIFT + W", hl.dsp.exec_cmd("firefox --private-window"))
+bind("SUPER + SHIFT + Q", hl.dsp.exec_cmd("pkill -9 -f $(hyprctl activewindow -j | jq -r .class)"))
+bind("SUPER + SHIFT + E", hl.dsp.exec_cmd("[float; size 960 600; center] dolphin"))
+bind("SUPER + SHIFT + W", hl.dsp.exec_cmd("firefox --private-window"))
 
 -- App toggles
 rebind(
