@@ -1,4 +1,4 @@
--- Utilities
+-- Functions
 local HOME = os.getenv("HOME") or ""
 local XDG_RUNTIME_DIR = os.getenv("XDG_RUNTIME_DIR") or "/tmp"
 
@@ -33,7 +33,7 @@ local function write_file(path, data)
 end
 
 local function notify(msg)
-	hl.exec_cmd(string.format('notify-send "Hyprland Refresh Rate" "%s"', msg))
+	hl.exec_cmd(string.format('hyprctl notify 1 3000 "rgb(33ccff)" "Hyprland Refresh Rate: %s"', msg))
 end
 
 local function bind(key, action, description)
@@ -215,7 +215,7 @@ local function toggle_refresh()
 	notify(string.format("eDP-1 switched to %dHz", next_rate))
 end
 
--- Basic binds
+-- Binds
 bind("SUPER + SHIFT + Q", hl.dsp.exec_cmd("pkill -9 -f $(hyprctl activewindow -j | jq -r .class)"))
 bind("SUPER + SHIFT + E", hl.dsp.exec_cmd("[float; size 960 600; center] dolphin"))
 bind("SUPER + SHIFT + W", hl.dsp.exec_cmd("firefox --private-window"))
@@ -228,10 +228,10 @@ rebind(
 		command = "vesktop",
 		class = "vesktop",
 	}),
-	"Vesktop"
+	"App: Vesktop"
 )
 
-bind("SUPER + SHIFT + O", hl.dsp.exec_cmd("obsidian"), "Obsidian")
+bind("SUPER + SHIFT + O", hl.dsp.exec_cmd("obsidian"), "App: Obsidian")
 
 rebind(
 	"SUPER + A",
@@ -240,26 +240,28 @@ rebind(
 		command = "spotify-launcher",
 		class = "spotify",
 	}),
-	"Spotify"
+	"App: Spotify"
 )
 
 rebind("SUPER + X", hl.dsp.exec_cmd("kitty nvim"))
-rebind("SUPER + C", hl.dsp.exec_cmd("papers"), "Document Viewer")
+rebind("SUPER + C", hl.dsp.exec_cmd("papers"), "App: Document Viewer")
 
 -- Scripts
-bind_cmd("SUPER + U", "kitty ~/.config/hypr/custom/scripts/printdotscommits.sh", "Check dots-hyprland commits")
-bind_cmd("SUPER + SHIFT + U", "kitty ~/.config/hypr/custom/scripts/updatedots.sh", "Update dots-hyprland")
-bind_cmd("SUPER + Y", "kitty ~/.config/hypr/custom/scripts/archstatusprint.sh", "Check Archstatus")
-bind_cmd("SUPER + SHIFT + Y", "kitty ~/.config/hypr/custom/scripts/updatesystem.sh", "Update system")
-bind_cmd("SUPER + ALT + D", "~/.config/hypr/custom/scripts/toggledock.sh", "Toggle dock")
-bind("SUPER + ALT + P", toggle_refresh, "Change refresh rate")
-bind_cmd("SUPER + ALT + K", "~/.config/hypr/custom/scripts/toggleclock.sh", "Toggle clock")
-bind("SUPER + ALT + J", hl.dsp.global("quickshell:barToggle"), "Toggle bar")
+bind_cmd("SUPER + U", "kitty ~/.config/hypr/custom/scripts/printdotscommits.sh", "Misc: Check dots-hyprland commits")
+bind_cmd("SUPER + SHIFT + U", "kitty ~/.config/hypr/custom/scripts/updatedots.sh", "Misc: Update dots-hyprland")
+bind_cmd("SUPER + Y", "kitty ~/.config/hypr/custom/scripts/archstatusprint.sh", "Misc: Check Archstatus")
+bind_cmd("SUPER + SHIFT + Y", "kitty ~/.config/hypr/custom/scripts/updatesystem.sh", "Misc: Update system")
+
+-- Shell
+bind_cmd("SUPER + ALT + D", "~/.config/hypr/custom/scripts/toggledock.sh", "Shell: Toggle dock")
+bind("SUPER + ALT + P", toggle_refresh, "Misc: Change refresh rate")
+bind_cmd("SUPER + ALT + K", "~/.config/hypr/custom/scripts/toggleclock.sh", "Shell: Toggle clock")
+bind("SUPER + ALT + J", hl.dsp.global("quickshell:barToggle"), "Shell: Toggle bar")
 bind_cmd("SUPER + ALT + L", "loginctl lock-session")
 unbind("SUPER + L")
 
 -- Special windows
-rebind("CTRL + SHIFT + ESCAPE", function()
+rebind("CTRL + SHIFT + Escape", function()
 	local WS_NAME = "3"
 	local WS = "special:" .. WS_NAME
 	local TITLE = "btop"
@@ -283,9 +285,9 @@ rebind("CTRL + SHIFT + ESCAPE", function()
 	end
 
 	hl.dispatch(hl.dsp.workspace.toggle_special(WS_NAME))
-end, "Btop")
+end, "App: Btop")
 
-bind("CTRL + ALT + BACKSPACE", hl.dsp.global("quickshell:sessionToggle"))
+bind("CTRL + ALT + Backspace", hl.dsp.global("quickshell:sessionToggle"))
 bind("SUPER + BACKSLASH", function()
 	local handle = io.popen("pgrep -x fcitx5 >/dev/null && echo 1 || echo 0")
 	if not handle then
@@ -300,10 +302,10 @@ bind("SUPER + BACKSLASH", function()
 	else
 		hl.exec_cmd("fcitx5 -d")
 	end
-end, "Toggle fcitx5")
+end, "App: Toggle fcitx5")
 
 bind_cmd(
-	"SUPER + ALT + BACKSLASH",
+	"SUPER + ALT + Backslash",
 	'kitty --class neo neo -m "Those who worship the terminal never fear the system. They are the system." --defaultbg --speed=12 --density=10 --lingerms=1,1 --rippct=0'
 )
 
@@ -314,7 +316,7 @@ hl.window_rule({
 	fullscreen = true,
 })
 
-bind_cmd("SUPER + SHIFT + BACKSLASH", "kitty --class unimatrix unimatrix")
+bind_cmd("SUPER + SHIFT + Backslash", "kitty --class unimatrix unimatrix")
 hl.window_rule({
 	match = {
 		class = "unimatrix",
@@ -322,7 +324,7 @@ hl.window_rule({
 	fullscreen = true,
 })
 
-bind_cmd("CTRL + SUPER + BACKSLASH", "kitty --class vis vis")
+bind_cmd("CTRL + SUPER + Backslash", "kitty --class vis vis")
 hl.window_rule({
 	match = {
 		class = "vis",
@@ -331,7 +333,7 @@ hl.window_rule({
 })
 
 -- Floating cycle
-rebind("SUPER + ALT + SPACE", function()
+rebind("SUPER + ALT + Space", function()
 	local win = hl.get_active_window()
 	if not win or not win.address then
 		return
@@ -351,46 +353,47 @@ local Copilot = "SUPER + SHIFT + F23"
 
 bind(Copilot, function()
 	cycle_layout({ "scrolling", "monocle" })
-end, "!CYCLE LAYOUT")
+end, "Misc: !CYCLE LAYOUT")
 
 bind("CTRL + " .. Copilot, function()
 	cycle_layout({ "dwindle", "master" })
-end, "!CYCLE LAYOUT (TILED)")
+end, "Misc: !CYCLE LAYOUT (TILED)")
 
 -- Layout-specific binds
 -- Dwindle
-rebind("SUPER + J", layout_bind("dwindle", "togglesplit"), "[d] Togglesplit")
-
+rebind("SUPER + J", layout_bind("dwindle", "togglesplit"), "Window: [d] Togglesplit")
+rebind("SUPER + Semicolon", layout_bind("dwindle", "splitratio -0.1"))
+rebind("SUPER + Apostrophe", layout_bind("dwindle", "splitratio +0.1"))
 -- Master
-bind("SUPER + J", layout_bind("master", "swapwithmaster"), "[m] Swap master")
-bind("SUPER + SHIFT + J", layout_bind("master", "addmaster"), "[m] Add master")
-bind("SUPER + SHIFT + K", layout_bind("master", "removemaster"), "[m] Remove master")
-rebind("SUPER + COMMA", layout_bind("master", "cyclenext noloop"), "[m] Cycle next")
-rebind("SUPER + PERIOD", layout_bind("master", "cycleprev noloop"), "[m] Cycle prev")
-bind("SUPER + SHIFT + COMMA", layout_bind("master", "swapprev noloop"), "[m] Swap prev")
-bind("SUPER + SHIFT + PERIOD", layout_bind("master", "swapnext noloop"), "[m] Swap next")
-bind("SUPER + ALT + COMMA", layout_bind("master", "rollnext"), "[m] Roll next")
-bind("SUPER + ALT + PERIOD", layout_bind("master", "rollprev"), "[m] Roll prev")
-bind("SUPER + SEMICOLON", layout_bind("master", "mfact -0.05"))
-bind("SUPER + APOSTROPHE", layout_bind("master", "mfact +0.05"))
-bind("SUPER + SPACE", layout_bind("master", "orientationcycle"), "[m] Cycle orientation")
+bind("SUPER + J", layout_bind("master", "swapwithmaster"), "Window: [m] Swap master")
+bind("SUPER + SHIFT + J", layout_bind("master", "addmaster"), "Window: [m] Add master")
+bind("SUPER + SHIFT + K", layout_bind("master", "removemaster"), "Window: [m] Remove master")
+rebind("SUPER + Comma", layout_bind("master", "cyclenext noloop"), "Window: [m] Cycle next")
+rebind("SUPER + Period", layout_bind("master", "cycleprev noloop"), "Window: [m] Cycle prev")
+bind("SUPER + SHIFT + Comma", layout_bind("master", "swapprev noloop"), "Window: [m] Swap prev")
+bind("SUPER + SHIFT + Period", layout_bind("master", "swapnext noloop"), "Window: [m] Swap next")
+bind("SUPER + ALT + Comma", layout_bind("master", "rollnext"), "Window: [m] Roll next")
+bind("SUPER + ALT + Period", layout_bind("master", "rollprev"), "Window: [m] Roll prev")
+bind("SUPER + Semicolon", layout_bind("master", "mfact -0.05"))
+bind("SUPER + Apostrophe", layout_bind("master", "mfact +0.05"))
+bind("SUPER + Space", layout_bind("master", "orientationcycle"), "Window: [m] Cycle orientation")
 
 -- Monocle
 bind("ALT + TAB", layout_bind("monocle", "cyclenext"))
 
-bind("SUPER + PERIOD", layout_bind("scrolling", "focus u"), "[s] Move view (u)")
-bind("SUPER + COMMA", layout_bind("scrolling", "focus d"), "[s] Move view (d)")
-bind("SUPER + SHIFT + PERIOD", layout_bind("scrolling", "colresize +0.1"), "[s] Change size (+0.1)")
-bind("SUPER + SHIFT + COMMA", layout_bind("scrolling", "colresize -0.1"), "[s] Change size (-0.1)")
-bind("SUPER + ALT + COMMA", layout_bind("scrolling", "swapcol l"), "[s] Swap row [u]")
-bind("SUPER + ALT + PERIOD", layout_bind("scrolling", "swapcol r"), "[s] Swap row [d]")
-
 -- Scrolling
-rebind("SUPER + mouse_up", layout_bind("scrolling", "focus d"), "[s] Move view (d)")
-rebind("SUPER + mouse_down", layout_bind("scrolling", "focus u"), "[s] Move view (u)")
+bind("SUPER + Period", layout_bind("scrolling", "focus u"), "Window: [s] Move view (u)")
+bind("SUPER + Comma", layout_bind("scrolling", "focus d"), "Window: [s] Move view (d)")
+bind("SUPER + SHIFT + Period", layout_bind("scrolling", "colresize +0.1"), "Window: [s] Change size (+0.1)")
+bind("SUPER + SHIFT + Comma", layout_bind("scrolling", "colresize -0.1"), "Window: [s] Change size (-0.1)")
+bind("SUPER + ALT + Comma", layout_bind("scrolling", "swapcol l"), "Window: [s] Swap row [u]")
+bind("SUPER + ALT + Period", layout_bind("scrolling", "swapcol r"), "Window: [s] Swap row [d]")
+
+rebind("SUPER + mouse_up", layout_bind("scrolling", "focus d"))
+rebind("SUPER + mouse_down", layout_bind("scrolling", "focus u"))
 rebind("SUPER + SHIFT + mouse_up", hl.dsp.focus({ workspace = "r+1" }))
 rebind("SUPER + SHIFT + mouse_down", hl.dsp.focus({ workspace = "r-1" }))
-rebind("SUPER + ALT + mouse_up", layout_bind("scrolling", "swapcol l"), "[s] Swap row [u]")
-rebind("SUPER + ALT + mouse_down", layout_bind("scrolling", "swapcol r"), "[s] Swap row [d]")
-rebind("CTRL + SUPER + mouse_up", layout_bind("scrolling", "colresize -0.1"), "[s] Change size (-0.1)")
-rebind("CTRL + SUPER + mouse_down", layout_bind("scrolling", "colresize +0.1"), "[s] Change size (+0.1)")
+rebind("SUPER + ALT + mouse_up", layout_bind("scrolling", "swapcol l"))
+rebind("SUPER + ALT + mouse_down", layout_bind("scrolling", "swapcol r"))
+rebind("CTRL + SUPER + mouse_up", layout_bind("scrolling", "colresize -0.1"))
+rebind("CTRL + SUPER + mouse_down", layout_bind("scrolling", "colresize +0.1"))
