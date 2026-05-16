@@ -285,7 +285,7 @@ rebind("CTRL + SHIFT + Escape", function()
 	end
 
 	hl.dispatch(hl.dsp.workspace.toggle_special(WS_NAME))
-end, "App: Btop")
+end)
 
 bind("CTRL + ALT + Backspace", hl.dsp.global("quickshell:sessionToggle"))
 bind("SUPER + BACKSLASH", function()
@@ -386,8 +386,8 @@ bind("SUPER + Period", layout_bind("scrolling", "focus u"), "Window: [s] Move vi
 bind("SUPER + Comma", layout_bind("scrolling", "focus d"), "Window: [s] Move view (d)")
 bind("SUPER + SHIFT + Period", layout_bind("scrolling", "colresize +0.1"), "Window: [s] Change size (+0.1)")
 bind("SUPER + SHIFT + Comma", layout_bind("scrolling", "colresize -0.1"), "Window: [s] Change size (-0.1)")
-bind("SUPER + ALT + Comma", layout_bind("scrolling", "swapcol l"), "Window: [s] Swap row [u]")
-bind("SUPER + ALT + Period", layout_bind("scrolling", "swapcol r"), "Window: [s] Swap row [d]")
+bind("SUPER + ALT + Comma", layout_bind("scrolling", "swapcol r"), "Window: [s] Swap row [u]")
+bind("SUPER + ALT + Period", layout_bind("scrolling", "swapcol l"), "Window: [s] Swap row [d]")
 
 rebind("SUPER + mouse_up", layout_bind("scrolling", "focus d"))
 rebind("SUPER + mouse_down", layout_bind("scrolling", "focus u"))

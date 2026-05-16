@@ -30,11 +30,11 @@ local window_rules = {
 local workspace_rules = {
 	{
 		workspace = "s[false]",
-		gaps_out = 30,
+		gaps_out = 40,
 	},
 	{
 		workspace = "s[true]",
-		gaps_out = 50,
+		gaps_out = 60,
 	},
 }
 
