@@ -74,7 +74,6 @@ end
 
 local function cycle_layout(layouts)
 	local current = current_layout_name()
-
 	local next_index = 1
 	for i, layout in ipairs(layouts) do
 		if layout == current then
@@ -288,7 +287,7 @@ rebind("CTRL + SHIFT + Escape", function()
 end)
 
 bind("CTRL + ALT + Backspace", hl.dsp.global("quickshell:sessionToggle"))
-bind("SUPER + BACKSLASH", function()
+bind("SUPER + Backslash", function()
 	local handle = io.popen("pgrep -x fcitx5 >/dev/null && echo 1 || echo 0")
 	if not handle then
 		return
@@ -361,19 +360,19 @@ end, "Misc: !CYCLE LAYOUT (TILED)")
 
 -- Layout-specific binds
 -- Dwindle
-rebind("SUPER + J", layout_bind("dwindle", "togglesplit"), "Window: [d] Togglesplit")
+rebind("SUPER + J", layout_bind("dwindle", "togglesplit"))
 rebind("SUPER + Semicolon", layout_bind("dwindle", "splitratio -0.1"))
 rebind("SUPER + Apostrophe", layout_bind("dwindle", "splitratio +0.1"))
 -- Master
-bind("SUPER + J", layout_bind("master", "swapwithmaster"), "Window: [m] Swap master")
-bind("SUPER + SHIFT + J", layout_bind("master", "addmaster"), "Window: [m] Add master")
-bind("SUPER + SHIFT + K", layout_bind("master", "removemaster"), "Window: [m] Remove master")
-rebind("SUPER + Comma", layout_bind("master", "cyclenext noloop"), "Window: [m] Cycle next")
-rebind("SUPER + Period", layout_bind("master", "cycleprev noloop"), "Window: [m] Cycle prev")
-bind("SUPER + SHIFT + Comma", layout_bind("master", "swapprev noloop"), "Window: [m] Swap prev")
-bind("SUPER + SHIFT + Period", layout_bind("master", "swapnext noloop"), "Window: [m] Swap next")
-bind("SUPER + ALT + Comma", layout_bind("master", "rollnext"), "Window: [m] Roll next")
-bind("SUPER + ALT + Period", layout_bind("master", "rollprev"), "Window: [m] Roll prev")
+bind("SUPER + J", layout_bind("master", "swapwithmaster"))
+bind("SUPER + SHIFT + J", layout_bind("master", "addmaster"))
+bind("SUPER + SHIFT + K", layout_bind("master", "removemaster"))
+rebind("SUPER + Comma", layout_bind("master", "cyclenext noloop"))
+rebind("SUPER + Period", layout_bind("master", "cycleprev noloop"))
+bind("SUPER + SHIFT + Comma", layout_bind("master", "swapprev noloop"))
+bind("SUPER + SHIFT + Period", layout_bind("master", "swapnext noloop"))
+bind("SUPER + ALT + Comma", layout_bind("master", "rollnext"))
+bind("SUPER + ALT + Period", layout_bind("master", "rollprev"))
 bind("SUPER + Semicolon", layout_bind("master", "mfact -0.05"))
 bind("SUPER + Apostrophe", layout_bind("master", "mfact +0.05"))
 bind("SUPER + Space", layout_bind("master", "orientationcycle"), "Window: [m] Cycle orientation")
@@ -384,10 +383,10 @@ bind("ALT + TAB", layout_bind("monocle", "cyclenext"))
 -- Scrolling
 bind("SUPER + Period", layout_bind("scrolling", "focus u"), "Window: [s] Move view (u)")
 bind("SUPER + Comma", layout_bind("scrolling", "focus d"), "Window: [s] Move view (d)")
-bind("SUPER + SHIFT + Period", layout_bind("scrolling", "colresize +0.1"), "Window: [s] Change size (+0.1)")
-bind("SUPER + SHIFT + Comma", layout_bind("scrolling", "colresize -0.1"), "Window: [s] Change size (-0.1)")
-bind("SUPER + ALT + Comma", layout_bind("scrolling", "swapcol r"), "Window: [s] Swap row [u]")
-bind("SUPER + ALT + Period", layout_bind("scrolling", "swapcol l"), "Window: [s] Swap row [d]")
+bind("SUPER + SHIFT + Period", layout_bind("scrolling", "colresize +0.1"))
+bind("SUPER + SHIFT + Comma", layout_bind("scrolling", "colresize -0.1"))
+bind("SUPER + ALT + Comma", layout_bind("scrolling", "swapcol r"))
+bind("SUPER + ALT + Period", layout_bind("scrolling", "swapcol l"))
 
 rebind("SUPER + mouse_up", layout_bind("scrolling", "focus d"))
 rebind("SUPER + mouse_down", layout_bind("scrolling", "focus u"))
